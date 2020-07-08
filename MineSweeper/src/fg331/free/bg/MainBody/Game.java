@@ -75,13 +75,15 @@ public class Game implements Runnable {
         menu.mouseSetter();
         State.setCurrentState(menu);
 
-        //TODO wazmojno e da prowerqwam za samite bombi i ot tqh da dobawqm po edno na 8-te okolo neq
+        for (int i = 0; i < 6; i++) {
+            render();
+        }
     }
 
-    public void BlankBlockCleaner(int coordY, int coordX) {
-        for (int i = coordY - 1; i < coordY + 2; i++) {
-            for (int j = coordX - 1; j < coordX + 2; j++) {
-                if (i >= 0 && j >= 0 && i < mapHeight && j < mapWidth) {
+    public void BlankBlockCleaner(int coordX, int coordY) {
+        for (int i = coordX - 1; i < coordX + 2; i++) {
+            for (int j = coordY - 1; j < coordY + 2; j++) {
+                if (i >= 0 && j >= 0 && i < mapWidth && j < mapHeight) {
                     if (map[i][j] == 11) {
                         remainingBombs++;
                     }
@@ -114,7 +116,7 @@ public class Game implements Runnable {
         }
     }
 
-    private void render() { // risuwa4
+    public void render() { // risuwa4
         BufferStrategy bs = display.getCanvas().getBufferStrategy();
         if (bs == null) {
             display.getCanvas().createBufferStrategy(3);
@@ -133,25 +135,24 @@ public class Game implements Runnable {
         g.dispose();
     }
 
-
-    public void exiter(int y, int x, boolean fail) {
+    public void exiter(int x, int y, boolean fail) {
         for (int i = 0; i < mapWidth; i++) {
             for (int j = 0; j < mapHeight; j++) {
-                if (map[j][i] != 0 && map[j][i] != 11) { // ako ne e flag4e
-                    map[j][i] = actualMap[j][i]; // update na widimata karta
+                if (map[i][j] != 0 && map[i][j] != 11) { // ako ne e flag4e
+                    map[i][j] = actualMap[i][j]; // update na widimata karta
                 }
 
             }
         }
         if (fail) {
-            map[y][x] = 15; // wrashta na originalnata aktiwirana bomba
+            map[x][y] = 15; // wrashta na originalnata aktiwirana bomba
         }
         timer = false;
         gameRunning = false;
 
         if (!fail)
-            Util.loadHighscore(Assets.path + "\\" + "HighScores.txt", BOMBSAMOUNT, mapWidth, mapHeight, sekundi, minuti);
-//            Util.loadHighscore("res/txt/HighScores.txt", BOMBSAMOUNT, mapWidth, mapHeight, sekundi, minuti);
+//            Util.loadHighscore(Assets.path + "\\" + "HighScores.txt", BOMBSAMOUNT, mapWidth, mapHeight, sekundi, minuti);
+            Util.loadHighscore("res/txt/HighScores.txt", BOMBSAMOUNT, mapWidth, mapHeight, sekundi, minuti);
     }
 
     @Override
@@ -173,16 +174,15 @@ public class Game implements Runnable {
                 e.printStackTrace();
             }
         }
-
         stop();
     }
+
     public synchronized void menuUpdater() {
         isSwitching = true;
         mapWidth = 30;
         mapHeight = 20;
         display.getFrame().setVisible(false);
         display = new Display(title, mapWidth * BlockSize, topOffset + mapHeight * BlockSize);
-
     }
 
     synchronized void start() {

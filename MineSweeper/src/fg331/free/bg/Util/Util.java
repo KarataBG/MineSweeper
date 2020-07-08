@@ -1,34 +1,32 @@
 package fg331.free.bg.Util;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.*;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Objects;
 
 public class Util {
 
     public static void loadHighscore(String path, int bomb, int width, int height, int sekundi, int minuti) {
-        StringBuilder builder = new StringBuilder(), copy = new StringBuilder(); // builder koito ste prieme informaciqta ot celiq fail
-        boolean isNew = true; // ste proweri dali ste ima nowa informaciq za dobawqne
+        StringBuilder builder = new StringBuilder(), copy = new StringBuilder();
+        boolean isNew = true;
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path)); // buferiran 4etec na txt file
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 
-            String line; // priema edin po edin redowete ot txt file
-            while ((line = bufferedReader.readLine()) != null) { // dokato ima liniq s tekst
-                builder.append(line).append("\n"); // wzima wsi4ki redowe kato edin red i now red i otnowo
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line).append("\n");
             }
-            String temp = builder.toString(); // prehwarlqm wzetiq tekst
-            String[] streaks = temp.split("\n"); // wzima otdelno redowete
+            String temp = builder.toString();
+            String[] streaks = temp.split("\n");
 
-            System.out.println(streaks.length);
+//            System.out.println(streaks.length);
+            String timeString = String.format("%s %s %s %s", bomb, width, height, (sekundi + minuti * 60));
             for (int i = 0; i < streaks.length; i++) {
                 String[] row = streaks[i].split("\\s+"); // wzima indiwidualno redowete za analiz
                 if (parseInt(row[0]) == bomb && parseInt(row[1]) == width && parseInt(row[2]) == height) { // ako ima we4e score
                     isNew = false;
-                    if (sekundi + minuti * 100 < parseInt(row[3])) { // prowerqwa dali nowoto wreme e po malko
-                        copy.append(String.format("%s %s %s %s", String.valueOf(bomb), String.valueOf(width), String.valueOf(height), String.valueOf(sekundi + minuti * 100))).append("\n");
+                    if (sekundi + minuti * 60 < parseInt(row[3])) { // prowerqwa dali nowoto wreme e po malko
+                        copy.append(timeString).append("\n");
                     } else { // ako nqma takaw score direktno wawejda
                         copy.append(streaks[i]).append("\n");
                     }
@@ -37,7 +35,7 @@ public class Util {
                 }
             }
             if (isNew) {
-                copy.append(String.format("%s %s %s %s", String.valueOf(bomb), String.valueOf(width), String.valueOf(height), String.valueOf(sekundi + minuti * 100))).append("\n");
+                copy.append(timeString).append("\n");
             }
             PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, false))); // print za izkarwaneto na obnowenata informaciq
             printWriter.print(copy.toString());

@@ -51,8 +51,8 @@ public class Scores extends State {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(Assets.path + "\\" + "HighScores.txt"));
-//            BufferedReader bufferedReader = new BufferedReader(new FileReader("res/txt/HighScores.txt"));
+//            BufferedReader bufferedReader = new BufferedReader(new FileReader(Assets.path + "\\" + "HighScores.txt"));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("res/txt/HighScores.txt"));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line).append("\n");

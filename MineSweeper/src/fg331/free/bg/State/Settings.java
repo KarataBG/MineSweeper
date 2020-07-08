@@ -21,10 +21,12 @@ public class Settings extends State {
         seButtonY = game.mapWidth * game.BlockSize / 2;
     }
 
-    private int seButtonX, seButtonY;
-    private int width = 200, height = 60;
+    private final int seButtonX;
+    private final int seButtonY;
+    private final int width = 200;
+    private final int height = 60;
     private int switcher = 0;
-    private ArrayList<Character> holderBombs = new ArrayList<Character>() {
+    private final ArrayList<Character> holderBombs = new ArrayList<Character>() {
         @Override
         public String toString() {
             StringBuilder stringBuilder = new StringBuilder();
@@ -35,7 +37,7 @@ public class Settings extends State {
             return stringBuilder.toString();
         }
     };
-    private ArrayList<Character> holderWidth = new ArrayList<Character>() {
+    private final ArrayList<Character> holderWidth = new ArrayList<Character>() {
         @Override
         public String toString() {
             StringBuilder stringBuilder = new StringBuilder();
@@ -46,8 +48,7 @@ public class Settings extends State {
             return stringBuilder.toString();
         }
     };
-    ;
-    private ArrayList<Character> holderHeight = new ArrayList<Character>() {
+    private final ArrayList<Character> holderHeight = new ArrayList<Character>() {
         @Override
         public String toString() {
             StringBuilder stringBuilder = new StringBuilder();
@@ -59,7 +60,7 @@ public class Settings extends State {
         }
     };
 
-    private MouseListener mouseListener = new MouseListener() {
+    private final MouseListener mouseListener = new MouseListener() {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (e.getX() > seButtonX && e.getX() < seButtonX + width && e.getY() > seButtonY && e.getY() < seButtonY + height) {
@@ -86,7 +87,7 @@ public class Settings extends State {
         }
     };
 
-    private KeyListener keyListener = new KeyListener() {
+    private final KeyListener keyListener = new KeyListener() {
         @Override
         public void keyTyped(KeyEvent e) {
 
@@ -146,46 +147,49 @@ public class Settings extends State {
     };
 
     public void updater() {
-        if (Integer.parseInt(holderBombs.toString()) > Integer.parseInt(holderWidth.toString()) * Integer.parseInt(holderHeight.toString()))
-            return;
-        if (holderBombs.size() > 0 && holderWidth.size() > 0 && holderHeight.size() > 0) {
-            game.BOMBSAMOUNT = Integer.parseInt(holderBombs.toString());
-            game.mapWidth = Integer.parseInt(holderWidth.toString());
-            game.mapHeight = Integer.parseInt(holderHeight.toString());
+        try {
+            if (Integer.parseInt(holderBombs.toString()) > Integer.parseInt(holderWidth.toString()) * Integer.parseInt(holderHeight.toString()))
+                return;
+            if (holderBombs.size() > 0 && holderWidth.size() > 0 && holderHeight.size() > 0) {
+                game.BOMBSAMOUNT = Integer.parseInt(holderBombs.toString());
+                game.mapWidth = Integer.parseInt(holderWidth.toString());
+                game.mapHeight = Integer.parseInt(holderHeight.toString());
 
-            game.map = new int[Integer.parseInt(holderHeight.toString())][Integer.parseInt(holderWidth.toString())];
-            game.actualMap = new int[Integer.parseInt(holderHeight.toString())][Integer.parseInt(holderWidth.toString())];
-            game.checkedPoints = new int[Integer.parseInt(holderHeight.toString())][Integer.parseInt(holderWidth.toString())];
-            game.remainingBombs = Integer.parseInt(holderBombs.toString());
-            game.gameRunning = true;
-            game.sekundi = 0;
-            game.minuti = 0;
-            game.won = false;
-            game.smilingGoodPerson = 0;
+                game.map = new int[Integer.parseInt(holderWidth.toString())][Integer.parseInt(holderHeight.toString())];
+                game.actualMap = new int[Integer.parseInt(holderHeight.toString())][Integer.parseInt(holderWidth.toString())];
+                game.checkedPoints = new int[Integer.parseInt(holderHeight.toString())][Integer.parseInt(holderWidth.toString())];
+                game.remainingBombs = Integer.parseInt(holderBombs.toString());
+                game.gameRunning = true;
+                game.sekundi = 0;
+                game.minuti = 0;
+                game.won = false;
+                game.smilingGoodPerson = 0;
 
-            if (game.mapWidth * 30 > game.display.getFrame().getWidth()) {
-                game.BlockSize = (int) (game.display.getFrame().getWidth() / game.mapWidth);
-            } else if (game.mapHeight * 30 + game.topOffset > game.screenSize.getHeight()) {
-                game.BlockSize = (int) ((game.screenSize.getHeight() - game.topOffset) / game.mapHeight);
-            } else {
-                game.BlockSize = 30;
-            }
-
-            for (int i = 0; i < Integer.parseInt(holderHeight.toString()); i++) {
-                for (int j = 0; j < Integer.parseInt(holderWidth.toString()); j++) {
-                    game.map[i][j] = 9;
-                    game.actualMap[i][j] = 0;
+                if (game.mapWidth * 30 > game.display.getFrame().getWidth()) {
+                    game.BlockSize = game.display.getFrame().getWidth() / game.mapWidth;
+                } else if (game.mapHeight * 30 + game.topOffset > game.screenSize.getHeight()) {
+                    game.BlockSize = (int) ((game.screenSize.getHeight() - game.topOffset) / game.mapHeight);
+                } else {
+                    game.BlockSize = 30;
                 }
-            }
 
-            game.gameState.HSFinder();
-            game.display.getFrame().setVisible(false);
-            if (game.mapWidth > 15) {
-                game.display = new Display(game.title, game.mapWidth * game.BlockSize, game.topOffset + game.mapHeight * game.BlockSize);
-            } else {
-                game.display = new Display(game.title, 450, game.topOffset + game.mapHeight * game.BlockSize);
+                for (int i = 0; i < Integer.parseInt(holderWidth.toString()); i++) {
+                    for (int j = 0; j < Integer.parseInt(holderHeight.toString()); j++) {
+                        game.map[i][j] = 9;
+                        game.actualMap[i][j] = 0;
+                    }
+                }
+
+                game.gameState.HSFinder();
+                game.display.getFrame().setVisible(false);
+                if (game.mapWidth > 15) {
+                    game.display = new Display(game.title, game.mapWidth * game.BlockSize, game.topOffset + game.mapHeight * game.BlockSize);
+                } else {
+                    game.display = new Display(game.title, 450, game.topOffset + game.mapHeight * game.BlockSize);
+                }
+                game.gameState.meButtonX = game.display.getFrame().getWidth() / 2 + game.BlockSize * 3 - 60;
             }
-            game.gameState.meButtonX = (int) (game.display.getFrame().getWidth() / 2 + game.BlockSize * 3 - 60); // TODO nesto tuk uprawi weroqtno za 6iro4inata
+        }catch (NumberFormatException ignored){
         }
     }
 
@@ -242,7 +246,7 @@ public class Settings extends State {
     public void setHolderBombs() {
         int j = holderBombs.size();
         for (int i = 0; i < j; i++) {
-            System.out.println(holderBombs.size());
+//            System.out.println(holderBombs.size());
             holderBombs.remove(0);
         }
     }
@@ -250,7 +254,7 @@ public class Settings extends State {
     public void setHolderWidth() {
         int j = holderWidth.size();
         for (int i = 0; i < j; i++) {
-            System.out.println(holderWidth.size());
+//            System.out.println(holderWidth.size());
             holderWidth.remove(0);
         }
     }
@@ -258,7 +262,7 @@ public class Settings extends State {
     public void setHolderHeight() {
         int j = holderHeight.size();
         for (int i = 0; i < j; i++) {
-            System.out.println(holderHeight.size());
+//            System.out.println(holderHeight.size());
             holderHeight.remove(0);
         }
     }
