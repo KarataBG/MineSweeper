@@ -26,7 +26,7 @@ public class Scores extends State {
         final String[] columns = {"Bombs", "Width", "Height", "Time"};
         final JTable pane = new JTable(new DefaultTableModel(HSRows, columns));
 
-        game.display.getFrame().setVisible(false);
+//        game.display.getFrame().dispose();
 
         JFrame jFrame = new JFrame();
         jFrame.setSize(500, 300);
@@ -35,7 +35,7 @@ public class Scores extends State {
         JButton jButton = new JButton("Menu");
         jButton.addActionListener(e -> {
             State.setCurrentState(game.menu);
-            jFrame.setVisible(false);
+            jFrame.dispose();
             game.display = new Display(game.title, game.mapWidth * game.BlockSize, game.topOffset + game.mapHeight * game.BlockSize);
             game.menu.mouseSetter();
         });

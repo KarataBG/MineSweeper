@@ -185,7 +185,7 @@ public class Game implements Runnable {
         isSwitching = true;
         mapWidth = 30;
         mapHeight = 20;
-        display.getFrame().setVisible(false);
+        display.getFrame().dispose();
         display = new Display(title, mapWidth * BlockSize, topOffset + mapHeight * BlockSize);
 
     }

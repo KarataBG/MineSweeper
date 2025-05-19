@@ -152,7 +152,7 @@ public class Menu extends State {
             }
         }
 
-        game.display.getFrame().setVisible(false);
+        game.display.getFrame().dispose();
         game.display = new Display(game.title, game.mapWidth * game.BlockSize, game.topOffset + game.mapHeight * game.BlockSize);
 
         mouseRemover();
