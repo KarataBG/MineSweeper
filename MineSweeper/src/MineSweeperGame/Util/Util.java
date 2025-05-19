@@ -1,46 +1,64 @@
 package MineSweeperGame.Util;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Util {
 
     public static void loadHighscore(String path, int bomb, int width, int height, int sekundi, int minuti) {
-        StringBuilder builder = new StringBuilder(), copy = new StringBuilder(); // builder koito ste prieme informaciqta ot celiq fail
-        boolean isNew = true; // ste proweri dali ste ima nowa informaciq za dobawqne
+        StringBuilder builder = new StringBuilder(), copy = new StringBuilder();
+        boolean isNew = true;
+
+        File file = new File(path);
+        if (!file.exists()){
+            try {
+                if (file.createNewFile()) {
+                    System.out.println("File created: " + file.getAbsolutePath());
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path)); // buferiran 4etec na txt file
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 
-            String line; // priema edin po edin redowete ot txt file
-            while ((line = bufferedReader.readLine()) != null) { // dokato ima liniq s tekst
-                builder.append(line).append("\n"); // wzima wsi4ki redowe kato edin red i now red i otnowo
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line).append("\n");
             }
-            String temp = builder.toString(); // prehwarlqm wzetiq tekst
-            String[] streaks = temp.split("\n"); // wzima otdelno redowete
+            String temp = builder.toString().trim();
+            String[] linesArray = temp.split("\n");
 
-            for (int i = 0; i < streaks.length; i++) {
-                String[] row = streaks[i].split("\\s+"); // wzima indiwidualno redowete za analiz
-                if (parseInt(row[0]) == bomb && parseInt(row[1]) == width && parseInt(row[2]) == height) { // ako ima we4e score
+            String formattedNewRow = String.format("%s %s %s %s", String.valueOf(bomb), String.valueOf(width), String.valueOf(height), String.valueOf(sekundi + minuti * 60));
+            for (int i = 0; i < linesArray.length; i++) {
+                String[] row = linesArray[i].split("\\s+");
+                if (parseInt(row[0]) == bomb && parseInt(row[1]) == width && parseInt(row[2]) == height) { // prowerqwa za sawpadenie w HighScores
                     isNew = false;
-                    if (sekundi + minuti * 100 < parseInt(row[3])) { // prowerqwa dali nowoto wreme e po malko
-                        copy.append(String.format("%s %s %s %s", String.valueOf(bomb), String.valueOf(width), String.valueOf(height), String.valueOf(sekundi + minuti * 100))).append("\n");
-                    } else { // ako nqma takaw score direktno wawejda
-                        copy.append(streaks[i]).append("\n");
+                    if (sekundi + minuti * 60 < parseInt(row[3])) { // prowerqwa dali nowoto wreme e po malko
+                        copy.append(formattedNewRow).append("\n");
+                    } else { // ako staroto wreme e po malko go apendwa nego
+                        copy.append(linesArray[i]).append("\n");
                     }
                 } else {
-                    copy.append(streaks[i]).append("\n");
+                    copy.append(linesArray[i]).append("\n");
                 }
             }
             if (isNew) {
-                copy.append(String.format("%s %s %s %s", String.valueOf(bomb), String.valueOf(width), String.valueOf(height), String.valueOf(sekundi + minuti * 100))).append("\n");
+                copy.append(formattedNewRow).append("\n");
             }
-            PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, false))); // print za izkarwaneto na obnowenata informaciq
-            printWriter.print(copy.toString());
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, false)); // print za izkarwaneto na obnowenata informaciq
+//            PrintWriter printWriter = new PrintWriter(bufferedWriter); // print za izkarwaneto na obnowenata informaciq
+//            printWriter.print(copy);
+
+            bufferedWriter.write(copy.toString());
+            bufferedWriter.flush();
+            bufferedWriter.close();
 
             bufferedReader.close();
-            printWriter.flush();
-            printWriter.close();
+//            printWriter.flush();
+//            printWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

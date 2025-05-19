@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class Scores extends State {
     private Game game;
-    private String[] randomName;
+//    private String[] randomName;
     private String[][] HSRows;
 
     public Scores(Game game) {
@@ -54,7 +54,8 @@ public class Scores extends State {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("res/txt/HighScores.txt"));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line).append("\n");
+                if (!line.isEmpty())
+                    stringBuilder.append(line).append("\n");
             }
             bufferedReader.close();
         } catch (IOException e) {
@@ -76,7 +77,7 @@ public class Scores extends State {
             System.arraycopy(tempString, k * 4, HSRows[k], 0, 4);
         }
 
-        randomName = stringBuilder.toString().split("\\s+");
+//        randomName = stringBuilder.toString().split("\\s+");
     }
 
     @Override
