@@ -151,6 +151,7 @@ public class Menu extends State {
         game.display.getFrame().dispose();
         game.display = new Display(game.title, game.mapWidth * game.BlockSize, game.topOffset + game.mapHeight * game.BlockSize);
 
+        game.gameState.setupGame();
         mouseRemover();
         game.gameState.mouseSetter();
         setCurrentState(game.gameState);
