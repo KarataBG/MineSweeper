@@ -50,6 +50,7 @@ public class Menu extends State {
             if (e.getX() > stButtonX && e.getX() < stButtonX + width && e.getY() > stButtonY && e.getY() < stButtonY + height) {
                 game.settings.updater();
                 if (game.map != null) {
+                    game.gameState.setupGame();
                     mouseRemover();
                     game.gameState.mouseSetter();
                     State.setCurrentState(game.gameState);
