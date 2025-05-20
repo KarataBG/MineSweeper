@@ -25,6 +25,53 @@ public class GameState extends State {
         meButtonX = game.mapWidth * game.BlockSize / 2 + game.BlockSize * 3 - 60;
     }
 
+    public void setupGame () {
+        game.smilingFace = 0;
+        game.gameRunning = true;
+        game.sekundi = 0;
+        game.minuti = 0;
+        game.won = false;
+        game.remainingBombs = game.BOMBSAMOUNT;
+        game.gameRunning = true;
+        game.timer = true;
+
+        for (int i = 0; i < game.mapHeight; i++) { // restartira  na4alnite stoinosti na kartite
+            for (int j = 0; j < game.mapWidth; j++) {
+                game.map[i][j] = 9;
+                game.actualMap[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < game.BOMBSAMOUNT; i++) { // zadawa nanowo bombite na slu4aen princip
+            int tempX;
+            int tempY;
+            do {
+                tempX = (int) (Math.random() * game.mapWidth);
+                tempY = (int) (Math.random() * game.mapHeight);
+            } while (game.actualMap[tempY][tempX] == 14);
+            game.actualMap[tempY][tempX] = 14;
+        }
+        for (int i = 0; i < game.mapHeight; i++) { // restartira prowerenite to4ki
+            for (int j = 0; j < game.mapWidth; j++) {
+                game.checkedPoints[i][j] = 0;
+            }
+        }
+        for (int i = 0; i < game.mapHeight; i++) { // zadawa nomera na blok4etata korespondirasti na bombite okolo tqh
+            for (int j = 0; j < game.mapWidth; j++) {
+                if (game.actualMap[i][j] == 14) {
+                    for (int k = i - 1; k < i + 2; k++) {
+                        for (int l = j - 1; l < j + 2; l++) {
+                            if (k >= 0 && k < game.mapHeight && l >= 0 && l < game.mapWidth) {
+                                if (game.actualMap[k][l] != 14) {
+                                    game.actualMap[k][l]++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private MouseListener mouseListener = new MouseListener() { // slu6atel na mi6kata
         // a / size of one cell, rounded down same for b
         Point temp; // wremenno zadarjane na koordinatite na mishkata
@@ -100,50 +147,10 @@ public class GameState extends State {
             if (SwingUtilities.isLeftMouseButton(e)) {
                 if (relativeCursorX > game.mapWidth * game.BlockSize / 2 - 60 && relativeCursorX < game.mapWidth * game.BlockSize / 2 + 2 * game.BlockSize && relativeCursorY > game.faceBase && relativeCursorY < game.faceBase + game.BlockSize * 3) { // ako e bil natisnat nad butona
                     //restartira igrata
-                    game.smilingFace = 0;
-                    game.gameRunning = true;
-                    game.sekundi = 0;
-                    game.minuti = 0;
-                    game.won = false;
-                    game.remainingBombs = game.BOMBSAMOUNT;
-                    game.gameRunning = true;
-                    game.timer = true;
 
-                    for (int i = 0; i < game.mapHeight; i++) { // restartira  na4alnite stoinosti na kartite
-                        for (int j = 0; j < game.mapWidth; j++) {
-                            game.map[i][j] = 9;
-                            game.actualMap[i][j] = 0;
-                        }
-                    }
-                    for (int i = 0; i < game.BOMBSAMOUNT; i++) { // zadawa nanowo bombite na slu4aen princip
-                        int tempX;
-                        int tempY;
-                        do {
-                            tempX = (int) (Math.random() * game.mapWidth);
-                            tempY = (int) (Math.random() * game.mapHeight);
-                        } while (game.actualMap[tempY][tempX] == 14);
-                        game.actualMap[tempY][tempX] = 14;
-                    }
-                    for (int i = 0; i < game.mapHeight; i++) { // restartira prowerenite to4ki
-                        for (int j = 0; j < game.mapWidth; j++) {
-                            game.checkedPoints[i][j] = 0;
-                        }
-                    }
-                    for (int i = 0; i < game.mapHeight; i++) { // zadawa nomera na blok4etata korespondirasti na bombite okolo tqh
-                        for (int j = 0; j < game.mapWidth; j++) {
-                            if (game.actualMap[i][j] == 14) {
-                                for (int k = i - 1; k < i + 2; k++) {
-                                    for (int l = j - 1; l < j + 2; l++) {
-                                        if (k >= 0 && k < game.mapHeight && l >= 0 && l < game.mapWidth) {
-                                            if (game.actualMap[k][l] != 14) {
-                                                game.actualMap[k][l]++;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    setupGame();
+
+
                 } else if (game.gameRunning) { // ako ne e natisnato nad butona i igrata warwi
                     if (coordY < 0 || coordY > game.mapHeight || coordX < 0 || coordX > game.mapWidth)
                         return;
