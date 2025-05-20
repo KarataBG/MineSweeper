@@ -32,8 +32,9 @@ public class GameState extends State {
         game.minuti = 0;
         game.won = false;
         game.remainingBombs = game.BOMBSAMOUNT;
-        game.gameRunning = true;
         game.timer = true;
+        meButtonX = game.mapWidth * game.BlockSize / 2 + game.BlockSize*3 -60;
+
 
         for (int i = 0; i < game.mapHeight; i++) { // restartira  na4alnite stoinosti na kartite
             for (int j = 0; j < game.mapWidth; j++) {

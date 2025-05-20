@@ -139,11 +139,7 @@ public class Menu extends State {
         game.map = new int[game.mapHeight][game.mapWidth];
         game.actualMap = new int[game.mapHeight][game.mapWidth];
         game.checkedPoints = new int[game.mapHeight][game.mapWidth];
-        game.remainingBombs = game.BOMBSAMOUNT;
-        game.gameState.meButtonX = game.mapWidth * game.BlockSize / 2 + game.BlockSize*3 -60;
-        game.gameRunning = true;
-        game.sekundi = 0;
-        game.minuti = 0;
+
 
         for (int i = 0; i < game.mapHeight; i++) {
             for (int j = 0; j < game.mapWidth; j++) {
